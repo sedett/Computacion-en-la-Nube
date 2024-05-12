@@ -18,11 +18,12 @@ const DirectoryItem = ({ id, path, name, emails }) => (
 
 const DirectoryList = () => {
   const [directories, setDirectories] = useState([]);
+  const [currentDirectoryIndex, setCurrentDirectoryIndex] = useState(0);
 
   useEffect(() => {
     const fetchDirectories = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/directories'); 
+        const response = await axios.get('http://127.0.0.1:8000/directories');
         setDirectories(response.data);
       } catch (error) {
         console.error('Error fetching directories:', error);
@@ -32,12 +33,27 @@ const DirectoryList = () => {
     fetchDirectories();
   }, []);
 
+  const handleNextDirectory = () => {
+    setCurrentDirectoryIndex((prevIndex) => (prevIndex + 1) % directories.length);
+  };
+
+  const handlePreviousDirectory = () => {
+    setCurrentDirectoryIndex((prevIndex) => (prevIndex - 1 + directories.length) % directories.length);
+  };
+
   return (
     <div className="directory-list">
       <h2 className="directory-list-title">Directory List</h2>
-      {directories.map((directory) => (
-        <DirectoryItem key={directory.id} {...directory} />
-      ))}
+      <p>Total Directories: {directories.length}</p>
+      {directories.length > 0 && (
+        <React.Fragment>
+          <DirectoryItem {...directories[currentDirectoryIndex]} />
+          <div>
+            <button onClick={handlePreviousDirectory}>Previous</button>
+            <button onClick={handleNextDirectory}>Next</button>
+          </div>
+        </React.Fragment>
+      )}
     </div>
   );
 };

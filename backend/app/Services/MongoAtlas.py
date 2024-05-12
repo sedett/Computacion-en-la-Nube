@@ -73,19 +73,3 @@ class MongoDBConnector:
             return "No se encontró ningún registro coincidente."
 
 #actializando 
-
-    # Función para actualizar un registro por ID en la tabla Users   
-        #
-        def update_Id(self, id):
-            # Conectarse a la base de datos en MongoDB Atlas
-            db = self.client['Compu_nube']
-            collection = db['Users']
-
-            # Eliminar el registro que coincide con el ID
-            result = collection.delete_one({"id": id})
-
-            # Verificar si se eliminó correctamente
-            if result.deleted_count == 1:
-                return "Registro eliminado exitosamente."
-            else:
-                return "No se encontró ningún registro coincidente."
