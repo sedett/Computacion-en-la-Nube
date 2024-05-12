@@ -11,19 +11,6 @@ router = APIRouter(
     prefix="/directories",
     tags=["directories"],
 )
-
-
-
-
-directories = [
-   DirectoryItem(id=1, name="Directorio 1", path="/directorio1", created_at="2024-05-10 12:00:00", updated_at="2024-05-10 12:00:00",emails=["usuario1@ejemplo.com","usuario2@ejemplo.com.mx","usuario3@ejemplo.org","usuario4@ejemplo.net"]),
-   DirectoryItem(id=2, name="Directorio 2", path="/directorio2", created_at="2024-05-10 12:30:00", updated_at="2024-05-10 12:30:00",emails=["usuario5@ejemplo.com","usuario6@ejemplo.com.mx","usuario7@ejemplo.org","usuario8@ejemplo.net"]),
-   DirectoryItem(id=3, name="Directorio 3", path="/directorio3", created_at="2024-05-10 13:00:00", updated_at="2024-05-10 13:00:00",emails=["usuario9@ejemplo.com","usuario10@ejemplo.com.mx","usuario11@ejemplo.org","usuario12@ejemplo.net"]),
-]
-
-
-
-
 # Definición del endpoint GET /directories/
 # Busca a todos los usuarios
 @router.get("/")
@@ -73,32 +60,33 @@ def update_directory(id: int, directory: DirectoryItem):
 # Definición del endpoint PATCH /directories/{id}
 # Actualiza parcialmente un directorio existente por su ID
 # Si no se encuentra, lanza una excepción HTTP 404
-@router.patch("/{id}")
-def update_directory_partial(id: int, directory_update: Optional[DirectoryItem] = None):
-    """
-    Actualiza parcialmente un directorio existente por su ID.
-
+"""
     Parámetros:
         id (int): ID del directorio a actualizar.
         directory_update (Optional[DirectoryItem]): Objeto opcional con los campos a actualizar.
-
     Devuelve:
         DirectoryItem: El directorio actualizado.
-
     Excepciones:
         HTTPException 404: Si no se encuentra el directorio.
-    """
-
-    for i, directory in enumerate(directories):
-        if directory.id == id:
-            # Actualizar solo los campos especificados en directory_update
-            if directory_update:
-                for field, value in directory_update.__dict__.items():
-                    if value is not None and hasattr(directory, field):
-                        setattr(directory, field, value)
-
-            # Devolver el directorio actualizado
-            return directory
+"""
+@router.patch("/{id}")
+def update_directory_partial(id: int, directory_update: Optional[DirectoryItem] = None):
+    connector = MongoDBConnector()
+    user = connector.read_Id(id)
+    if (user):
+        print("Serealizaron cambios")
+        usuario = DirectoryItem(**user)
+        if directory_update.path != user.get("path"):
+            usuario.path= directory_update.path
+            connector.delete_Id(id)
+            connector.insert_Users(usuario)
+        if directory_update.name != user.get("name"):
+            usuario.name= directory_update.name
+            connector.delete_Id(id)
+            connector.insert_Users(usuario)     
+    else:
+        print("No se realizaron actualizaciones.")
+        raise HTTPException(status_code=409, detail="User already exist")
 
 # Definición del endpoint DELETE /directories/{id}
 # Elimina un directorio existente por su ID
