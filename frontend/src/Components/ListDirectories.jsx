@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../Styles/ListDirectories.css';
 
-// Definir el modelo DirectoryItem
 const DirectoryItem = ({ id, path, name, emails }) => (
-  <div>
-    <h3>{name}</h3>
-    <p>Directory ID: {id}</p>
-    <p>Directory Path: {path}</p>
-    <p>Emails:</p>
-    <ul>
+  <div className="directory-item">
+    <h3 className="directory-item-title">{name}</h3>
+    <p className="directory-item-info">Directory ID: {id}</p>
+    <p className="directory-item-info">Directory Path: {path}</p>
+    <p className="directory-item-info">Emails:</p>
+    <ul className="directory-item-emails">
       {emails.map((email, index) => (
-        <li key={index}>{email}</li>
+        <li key={index} className="directory-item-email">{email}</li>
       ))}
     </ul>
   </div>
@@ -33,8 +33,8 @@ const DirectoryList = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Directory List</h2>
+    <div className="directory-list">
+      <h2 className="directory-list-title">Directory List</h2>
       {directories.map((directory) => (
         <DirectoryItem key={directory.id} {...directory} />
       ))}

@@ -6,7 +6,7 @@ import Menu from './Components/Menu';
 function App() {
   return (
     <div className="App">
-      <h1>API Puyua</h1>
+      <h1>API PUYUAAAAAA!!</h1>
       <Menu />
       
     </div>

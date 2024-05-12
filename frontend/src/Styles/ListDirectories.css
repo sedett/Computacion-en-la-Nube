@@ -1,0 +1,42 @@
+/* Estilos para el componente DirectoryList */
+.directory-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+  
+  .directory-list-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilos para el componente DirectoryItem */
+  .directory-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+  
+  .directory-item-title {
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
+  
+  .directory-item-info {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  .directory-item-emails {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .directory-item-email {
+    font-size: 14px;
+    margin-bottom: 3px;
+  }

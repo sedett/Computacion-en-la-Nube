@@ -1,21 +1,19 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import '../Styles/CreateDirectory.css';
 const CreateDirectory = () => {
   const [name, setName] = useState('');
   const [path, setPath] = useState('');
   const [emails, setEmails] = useState([]);
-  const [lastId, setLastId] = useState(0);
+  const [cedula, setCedula] = useState('');
+  const [directories, setDirectories] = useState([]);
 
   useEffect(() => {
     const fetchDirectories = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/directories');
         const directories = response.data;
-        if (directories.length > 0) {
-          const lastDirectory = directories[directories.length - 1];
-          setLastId(lastDirectory.id);
-        }
+        setDirectories(directories);
       } catch (error) {
         console.error('Error al obtener la lista de directorios:', error);
       }
@@ -24,76 +22,88 @@ const CreateDirectory = () => {
     fetchDirectories();
   }, []);
 
-    const handleNameChange = (event) => {
-      setName(event.target.value);
-    };
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
 
-    const handlePathChange = (event) => {
-      setPath(event.target.value);
-    };
+  const handlePathChange = (event) => {
+    setPath(event.target.value);
+  };
 
-    const handleEmailsChange = (index, event) => {
-      const newEmails = [...emails];
-      newEmails[index] = event.target.value;
-      setEmails(newEmails);
-    };
+  const handleEmailsChange = (index, event) => {
+    const newEmails = [...emails];
+    newEmails[index] = event.target.value;
+    setEmails(newEmails);
+  };
 
-    const handleAddEmailField = () => {
-      const newEmails = [...emails, ''];
-      setEmails(newEmails);
-    };
+  const handleAddEmailField = () => {
+    const newEmails = [...emails, ''];
+    setEmails(newEmails);
+  };
 
-    
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-    
-      try {
-        const response = await axios.post('http://127.0.0.1:8000/directories', {
-          id:lastId+1,
-          name,
-          path,
-          emails,
-        });
-    
-        // Aquí puedes manejar la respuesta del servidor, si es necesario
-        console.log('Directorio creado:', response.data);
-    
-        // Recargar la página para mostrar el nuevo directorio
-        window.location.reload();
-      } catch (error) {
-        console.error('Error al crear el directorio:', error);
-      }
-    };
-  
+  const handleCedulaChange = (event) => {
+    setCedula(event.target.value);
+  };
 
-  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const newDirectory = {
+        id: cedula,
+        name,
+        path,
+        emails,
+      };
+
+      await axios.post('http://127.0.0.1:8000/directories', newDirectory);
+
+      // Actualizar la lista de directorios en el estado local
+      setDirectories([...directories, newDirectory]);
+
+      // Restablecer los campos del formulario
+      setName('');
+      setPath('');
+      setEmails([]);
+      setCedula('');
+    } catch (error) {
+      console.error('Error al crear el directorio:', error);
+    }
+  };
 
   return (
-    <div>
-      <h2>Crear directorio</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Nombre:</label>
-          <input type="text" id="name" value={name} onChange={handleNameChange} />
+    <div className="container">
+      <form className="form" onSubmit={handleSubmit}>
+        <h2 className="title">Crear directorio</h2>
+        <div className="form-group">
+          <label htmlFor="name" className="label">Nombre:</label>
+          <input type="text" id="name" className="input" value={name} onChange={handleNameChange} />
         </div>
-        <div>
-          <label htmlFor="path">Ruta:</label>
-          <input type="text" id="path" value={path} onChange={handlePathChange} />
+        <div className="form-group">
+          <label htmlFor="path" className="label">Ruta:</label>
+          <input type="text" id="path" className="input" value={path} onChange={handlePathChange} />
         </div>
-        <div>
-          <label>Correos electrónicos:</label>
+        <div className="form-group">
+          <label htmlFor="cedula" className="label">Cédula:</label>
+          <input type="text" id="cedula" className="input" value={cedula} onChange={handleCedulaChange} />
+        </div>
+        <div className="form-group">
+          <label className="label">Correos electrónicos:</label>
           {emails.map((email, index) => (
-            <div key={index}>
+            <div key={index} className="email-group">
               <input
                 type="text"
                 value={email}
+                className="email-input"
                 onChange={(event) => handleEmailsChange(index, event)}
               />
             </div>
           ))}
-          <button type="button" onClick={handleAddEmailField}>Agregar campo de correo electrónico</button>
+          <button type="button" className="add-email-button" onClick={handleAddEmailField}>
+            Agregar campo de correo electrónico
+          </button>
         </div>
-        <button type="submit">Crear</button>
+        <button type="submit" className="submit-button">Crear</button>
       </form>
     </div>
   );

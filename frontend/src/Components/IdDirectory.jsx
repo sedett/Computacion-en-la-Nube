@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../Styles/IdDirectory.css';
 
 const DirectorySearch = () => {
   const [searchId, setSearchId] = useState('');

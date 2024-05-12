@@ -6,6 +6,8 @@ import UpdateDirectory from './UpdateDirectory'
 import DeleteDirectory from './DeleteDirectory'
 import Status from './Status'
 import PatchDirectory from './PatchDirectory'
+import '../Styles/Menu.css';
+
 // Importa otros componentes de endpoints aquí
 
 const Menu = () => {
@@ -37,23 +39,29 @@ const Menu = () => {
     }
   };
 
-    return (
-        <div>
-        <h2>Seleccione un endpoint:</h2>
-        <select value={selectedEndpoint} onChange={handleEndpointChange}>
-            <option value="">Seleccione</option>
-            <option value="Create">Crear Directorio</option>
-            <option value="List">Ver Directorios</option>
-            <option value="Search">Buscar Directorio</option>
-            <option value="Update">Actualizar Directorio</option>
-            <option value="Delete">Eliminar Directorio</option>
-            <option value="Status">Status</option>
-            <option value="Patch">Actualizar Parcialmente un Directorio</option>
-            {/* Agrega otras opciones para cada endpoint adicional */}
+  return (
+    <div className="menu-container">
+      <h2>Seleccione un endpoint:</h2>
+      <div className="select-container">
+        <select
+          className="endpoint-select"
+          value={selectedEndpoint}
+          onChange={handleEndpointChange}
+        >
+          <option value="">Seleccione</option>
+          <option value="Create">Crear Directorio</option>
+          <option value="List">Ver Directorios</option>
+          <option value="Search">Buscar Directorio</option>
+          <option value="Update">Actualizar Directorio</option>
+          <option value="Delete">Eliminar Directorio</option>
+          <option value="Status">Status</option>
+          <option value="Patch">Actualizar Parcialmente un Directorio</option>
+          {/* Agrega otras opciones para cada endpoint adicional */}
         </select>
-        {renderEndpointComponent()}
-        </div>
-    );
+      </div>
+      <div className="endpoint-component">{renderEndpointComponent()}</div>
+    </div>
+  );
 };
 
 export default Menu;
