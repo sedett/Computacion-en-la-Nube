@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    container_name: api
+    volumes:
+      - .:/app
+    restart: always
+    build: .
+    ports:
+      - '8000:8000'
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo:4-focal
+    restart: always 
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data:
