@@ -1,7 +1,6 @@
 from typing import List
 from pymongo import MongoClient
-from models import DirectoryItem
-from json import ObjectId
+
 
 class MongoDBConnector:
     def __init__(self):
