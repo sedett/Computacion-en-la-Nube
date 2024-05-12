@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, HTTPException
 from Services.MongoAtlas import MongoDBConnector
 from models import DirectoryItem
@@ -74,14 +74,31 @@ def update_directory(id: int, directory: DirectoryItem):
 # Actualiza parcialmente un directorio existente por su ID
 # Si no se encuentra, lanza una excepción HTTP 404
 @router.patch("/{id}")
-def patch_directory(id: int, directory: DirectoryItem = Body(..., embed=True)):
-    for i, d in enumerate(directories):
-        if d.id == id:
-            for key, value in directory.dict(exclude_unset=True).items():
-                setattr(directories[i], key, value)
-            return directories[i]
-    raise HTTPException(status_code=404, detail="Directory not found")
+def update_directory_partial(id: int, directory_update: Optional[DirectoryItem] = None):
+    """
+    Actualiza parcialmente un directorio existente por su ID.
 
+    Parámetros:
+        id (int): ID del directorio a actualizar.
+        directory_update (Optional[DirectoryItem]): Objeto opcional con los campos a actualizar.
+
+    Devuelve:
+        DirectoryItem: El directorio actualizado.
+
+    Excepciones:
+        HTTPException 404: Si no se encuentra el directorio.
+    """
+
+    for i, directory in enumerate(directories):
+        if directory.id == id:
+            # Actualizar solo los campos especificados en directory_update
+            if directory_update:
+                for field, value in directory_update.__dict__.items():
+                    if value is not None and hasattr(directory, field):
+                        setattr(directory, field, value)
+
+            # Devolver el directorio actualizado
+            return directory
 
 # Definición del endpoint DELETE /directories/{id}
 # Elimina un directorio existente por su ID

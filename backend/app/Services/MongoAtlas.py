@@ -1,11 +1,13 @@
 from typing import List
 from pymongo import MongoClient
 from models import DirectoryItem
-from json import ObjectId
+#from json import ObjectId
+#from pymongo import ObjectId
 
 class MongoDBConnector:
     def __init__(self):
         connection_string = "mongodb+srv://admin:Fresa.12@cluster0.cvzhqtt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0" 
+                            
         self.client = MongoClient(connection_string)
     
     #Funcion que insertadatos en la tabla usuarios

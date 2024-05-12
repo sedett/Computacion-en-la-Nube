@@ -1,0 +1,34 @@
+.status-ping {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
+  }
+  
+  .ping-text {
+    font-size: 10rem;
+    color: #fff;
+    text-shadow: 0 0 10px #fff;
+    animation: ping-animation 2s ease-in-out infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  @keyframes ping-animation {
+    0% {
+      transform: scale(1);
+      text-shadow: 0 0 10px #fff;
+    }
+    50% {
+      transform: scale(1.2);
+      text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
+    }
+    100% {
+      transform: scale(1);
+      text-shadow: 0 0 10px #fff;
+    }
+  }
